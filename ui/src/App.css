@@ -1,0 +1,79 @@
+html {
+	background-color: black;
+}
+
+.hero {
+	background-color: red;
+	background-image: linear-gradient(to top right, red, #f06d06);
+}
+
+h3 {
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+p, strong {
+	color: #eee;
+}
+
+a:hover {
+	color: #3273dc;
+	text-decoration: underline;
+}
+
+.tabs a {
+	color: #eee;
+    border-bottom-color: #eee;
+}
+
+.tabs a:hover {
+	color: #eee;
+    border-bottom-color: #aaa;
+	text-decoration: none;
+}
+
+.section {
+	padding: 1.5rem 1.5rem;
+}
+
+.notification {
+	font-weight: bold;
+	font-size: large;
+}
+
+.mock {
+	margin-bottom: 20px;
+}
+
+.mock .new-mock {
+	background-color: red;
+	background-image: linear-gradient(to top right, red, #f06d06);
+	color: #fff;
+	font-weight: bold;
+}
+
+.mock .method {
+	background-color: #333;
+	color: #fff;
+	font-weight: bold;
+}
+
+.mock select {
+	background-color: #333;
+	color: #fff;
+	font-weight: bold;
+}
+
+.mock input::placeholder {
+	font-style: italic;
+}
+
+.mock textarea {
+	background-color: #333;
+	color: #fff;
+}
+
+.mock textarea::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
