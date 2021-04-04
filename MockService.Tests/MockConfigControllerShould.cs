@@ -3,6 +3,7 @@ using MockService.Dtos.Input;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using System;
 
 namespace MockService.Tests
 {
@@ -26,7 +27,7 @@ namespace MockService.Tests
             actionResult.Should().BeOfType(typeof(OkObjectResult));
 
             var okObjectResult = actionResult as OkObjectResult;
-            okObjectResult?.Value.Should().BeNull();
+            okObjectResult?.Value.Should().BeOfType(typeof(Guid));
         }
     }
 }
