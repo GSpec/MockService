@@ -35,7 +35,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'MockApiService'
-        package: .
+        package: ./MockService/bin/Debug/netcoreapp3.1
     - name: Sign out of Azure
       run: |
         az logout
