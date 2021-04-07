@@ -60,7 +60,7 @@ class Config extends React.Component {
 	}
 	
 	componentDidMount() {
-		fetch("https://localhost:44304/MockConfig")
+		fetch("https://mockapiservice.azurewebsites.net/MockConfig")
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -87,11 +87,11 @@ class Config extends React.Component {
 			body: JSON.stringify(newMock)
 		}
 			
-		fetch("https://localhost:44304/MockConfig", request)
+		fetch("https://mockapiservice.azurewebsites.net/MockConfig", request)
 			.then(res => res.json())
 			.then(
 				(newMockReference) => {
-					fetch("https://localhost:44304/MockConfig/" + newMockReference)
+					fetch("https://mockapiservice.azurewebsites.net/MockConfig/" + newMockReference)
 						.then(res => res.json())
 						.then(
 							(newMock) => {
@@ -124,7 +124,7 @@ class Config extends React.Component {
 			body: mock
 		}
 			
-		fetch("https://localhost:44304/MockConfig/" + mock.mockReference, request)
+		fetch("https://mockapiservice.azurewebsites.net/MockConfig/" + mock.mockReference, request)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -144,7 +144,7 @@ class Config extends React.Component {
 			method: 'DELETE'
 		}
 			
-		fetch("https://localhost:44304/MockConfig/" + mockReference, request)
+		fetch("https://mockapiservice.azurewebsites.net/MockConfig/" + mockReference, request)
 			.then(
 				(result) => {
 					var filteredMocks = this.state.mocks.filter(function (mock) {
