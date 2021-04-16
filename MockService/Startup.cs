@@ -31,6 +31,7 @@ namespace MockService
                     builder =>
                     {
                         builder
+                            .SetIsOriginAllowedToAllowWildcardSubdomains()
                             .WithOrigins("http://*.mock.io", "http://mock.io")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
