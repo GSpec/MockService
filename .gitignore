@@ -398,3 +398,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Exclude NPM Build
+ui/build/

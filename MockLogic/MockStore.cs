@@ -31,7 +31,7 @@ namespace MockLogic
             }
         }
 
-        public static Mock? Retrieve(Request mockRequest)
+        public static Mock Retrieve(Request mockRequest)
         {
             if (!requestIndex.TryGetValue(mockRequest, out var mockReference))
             {
@@ -41,7 +41,7 @@ namespace MockLogic
             return Retrieve(mockReference);
         }
 
-        public static Mock? Retrieve(Guid mockReference)
+        public static Mock Retrieve(Guid mockReference)
         {
             if (!mockDictionary.TryGetValue(mockReference, out var response))
             {

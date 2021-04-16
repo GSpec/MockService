@@ -7,7 +7,7 @@ function App() {
 		<div className="App">
 			<section className="hero is-small is-danger">
 				<div className="hero-body">
-					<h1 className="title">Mock.me</h1>
+					<h1 className="title">Mock.io</h1>
 					<h2 className="subtitle">For mocking all of your APIs</h2>
 				</div>
 			</section>
@@ -180,7 +180,7 @@ class Config extends React.Component {
 					<div className="level-left">
 						<div className="level-item">
 							<p>
-								Mock endpoints available at <strong>http://mpp-esuite-rest.mock.me</strong>
+								Mock endpoints available at <strong>http://mpp-esuite-rest.mock.io</strong>
 							</p>
 						</div>
 					</div>
