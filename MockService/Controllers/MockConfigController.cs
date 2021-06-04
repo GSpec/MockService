@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MockLogic;
 using MockLogic.Models.Enums;
 using System;
+using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Dto = MockService.Dtos.Input;
 using Model = MockLogic.Models;
 
@@ -12,73 +15,75 @@ namespace MockService.Controllers
     [Route("[controller]")]
     public class MockConfigController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult Create([FromBody] Dto.Mock input)
+        private readonly MockServiceDbContext _mockDb;
+        public MockConfigController(MockServiceDbContext mockDb)
         {
-            if (input == null)
-            {
-                return BadRequest();
-            }
+            _mockDb = mockDb;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] Dto.Mock input)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             Enum.TryParse(typeof(Method), input.Request.Method, out var method);
-            var mock = new Model.Mock((Method)method, input.Request.Endpoint, input.Response.Headers, input.Response.Body);
+            var mock = new Model.Mock
+            {
+                Method = (Method)method,
+                Endpoint = input.Request.Endpoint,
+                ResponseHeaders = input.Response.Headers,
+                ResponseBody = input.Response.Body
+            };
 
-            MockStore.CreateOrUpdate(mock);
+            await _mockDb.Mocks.AddAsync(mock);
+            await _mockDb.SaveChangesAsync();
 
-            return Ok(mock.Reference);
+            return Ok(mock.Id);
         }
 
         [HttpPut]
         [Route("{reference}")]
-        public IActionResult Update(Guid reference, [FromBody] Dto.Mock input)
+        public async Task<IActionResult> UpdateAsync(Guid reference, [FromBody] Dto.Mock input)
         {
-            var mock = MockStore.Retrieve(reference);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (mock == null)
-            {
-                return NotFound();
-            }
+            var mock = await _mockDb.Mocks.FirstOrDefaultAsync(m => m.Id == reference);
+            mock.ResponseHeaders = input.Response.Headers;
+            mock.ResponseBody = input.Response.Body;
 
-            if (input == null)
-            {
-                return BadRequest();
-            }
+            _mockDb.Mocks.Update(mock);
+            await _mockDb.SaveChangesAsync();
 
-            mock.Response.Headers = input.Response.Headers;
-            mock.Response.Body = input.Response.Body;
-
-            MockStore.CreateOrUpdate(mock);
-
-            return Ok(mock.Reference);
+            return Ok(mock.Id);
         }
 
         [HttpGet]
-        public IActionResult Retrieve()
+        public async Task<IActionResult> RetrieveAsync()
         {
-            var mocks = MockStore.RetrieveAll();
+            var mocks = await _mockDb.Mocks.ToListAsync();
 
             return Ok(mocks);
         }
 
         [HttpGet]
         [Route("{reference}")]
-        public IActionResult Retrieve(Guid reference)
+        public async Task<IActionResult> RetrieveAsync(Guid reference)
         {
-            var mock = MockStore.Retrieve(reference);
+            var mock = await _mockDb.Mocks.FirstOrDefaultAsync(m => m.Id == reference);
 
-            if (mock == null)
-            {
-                return NotFound();
-            }
+            if (mock == null) return NotFound();
 
             return Ok(mock);
         }
 
         [HttpDelete]
         [Route("{reference}")]
-        public IActionResult Delete(Guid reference)
+        public async Task<IActionResult> DeleteAsync(Guid reference)
         {
-            MockStore.Delete(reference);
+            var mock = await _mockDb.Mocks.FirstOrDefaultAsync(m => m.Id == reference);
+
+            _mockDb.Mocks.Remove(mock);
+            await _mockDb.SaveChangesAsync();
 
             return Ok();
         }

@@ -1,6 +1,13 @@
 import React from 'react';
 import FlipMove from "react-flip-move";
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
 
 function App() {
 	return (
@@ -19,25 +26,11 @@ function App() {
 class Content extends React.Component {
 	render() {
 		return (
-			<section className="section is-small">
-				<div className="tabs">
-					<ul>
-						<li className="is-active">
-							<a>
-								<span className="icon is-small"><i className="fas fa-code" aria-hidden="true"></i></span>
-								<span>Configure Mocks</span>
-							</a>
-						</li>
-						<li>
-							<a>
-								<span className="icon is-small"><i className="fas fa-file-alt" aria-hidden="true"></i></span>
-								<span>View Request Logs</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-				<Config />
-			</section>
+			<Router>
+				<section className="section is-small">
+					<Route path="/:mockName" component={Config} />
+				</section>
+			</Router>
 		);
 	}
 }
@@ -84,7 +77,10 @@ class Config extends React.Component {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(newMock)
+			body: JSON.stringify({ 
+				mockName: this.props.match.params.mockName,
+				...newMock
+			})
 		}
 			
 		fetch("https://mockapiservice.azurewebsites.net/MockConfig", request)
@@ -176,11 +172,27 @@ class Config extends React.Component {
 		
 		return (
 			<React.Fragment>
+				<div className="tabs">
+					<ul>
+						<li className="is-active">
+							<Link to="/">
+								<span className="icon is-small"><i className="fas fa-code" aria-hidden="true"></i></span>
+								<span>Configure Mocks</span>
+							</Link>
+						</li>
+						<li>
+							<Link to="/logs">
+								<span className="icon is-small"><i className="fas fa-file-alt" aria-hidden="true"></i></span>
+								<span>View Request Logs</span>
+							</Link>
+						</li>
+					</ul>
+				</div>
 				<div className="level">
 					<div className="level-left">
-						<div className="level-item">
+						<div className="level-item">			
 							<p>
-								Mock endpoints available at <strong>http://mpp-esuite-rest.mock.io</strong>
+								Mock endpoints available at <strong>http://{this.props.match.params.mockName}.mock.io</strong>
 							</p>
 						</div>
 					</div>
@@ -220,7 +232,7 @@ class Mocks extends React.Component {
 
 class NewMock extends React.Component {
 	constructor(props) {
-		super(props)
+		super(props)		
 		this.handleEndpointInput = this.handleEndpointInput.bind(this);
 		this.handleResponseHeadersInput = this.handleResponseHeadersInput.bind(this);
 		this.handleResponseBodyInput = this.handleResponseBodyInput.bind(this);

@@ -13,14 +13,16 @@ namespace MockService.Controllers
         [HttpPost]
         public IActionResult ReturnMock()
         {
+            var mockName = Request.Host.Host;
             var endpoint = Request.Path.Value[5..];
 
-            var request = new Request { Method = Method.POST, Endpoint = endpoint };
-            var mock = MockStore.Retrieve(request);
+            //var request = new Request { Method = Method.POST, Endpoint = endpoint };
+            //var mock = MockServiceDBContext.Retrieve(request);
 
-            if (mock is null) return BadRequest("Oops! You've not created a mock for your request yet.");
+            //if (mock is null) 
+            return BadRequest("Oops! You've not created a mock for your request yet.");
 
-            return Ok(mock.Response.Body);
+            //return Ok(mock.Response.Body);
         }
     }
 }

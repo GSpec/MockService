@@ -4,16 +4,23 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 using System;
+using MockLogic;
+using Microsoft.EntityFrameworkCore;
 
 namespace MockService.Tests
 {
     public class MockConfigControllerShould
     {
+        private DbContextOptions<MockServiceDbContext> mockDbOptions = new DbContextOptionsBuilder<MockServiceDbContext>()
+            .UseInMemoryDatabase(databaseName: "MockDb")
+            .Options;
+
         [Fact]
-        public void CreateAMock()
+        public async void CreateAMock()
         {
             // Arrange
-            var controller = new MockConfigController();
+            var mockDb = new MockServiceDbContext(mockDbOptions);
+            var controller = new MockConfigController(mockDb);
             var dto = new Mock
             {
                 Request = new Request { Method = "POST", Endpoint = "/test" },
@@ -21,7 +28,7 @@ namespace MockService.Tests
             };
 
             // Act
-            var actionResult = controller.Create(dto);
+            var actionResult = await controller.CreateAsync(dto);
 
             // Assert
             actionResult.Should().BeOfType(typeof(OkObjectResult));
